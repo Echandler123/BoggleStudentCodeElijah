@@ -47,4 +47,8 @@ public class Trie {
         }
         return N.isWord();
     }
+
+    public Node getRoot() {
+        return root;
+    }
 }
