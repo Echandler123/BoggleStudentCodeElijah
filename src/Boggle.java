@@ -3,13 +3,11 @@ import java.util.Arrays;
 
 
 public class Boggle {
-
-
     public static String[] findWords(char[][] board, String[] dictionary) {
         Trie trieDict = new Trie();
         ArrayList<String> goodWords = new ArrayList<String>();
-        for (int i = 0; i < dictionary.length; i++) {
-            trieDict.insert(dictionary[i]);
+        for (String s : dictionary) {
+            trieDict.insert(s);
         }
         boolean [][] visited = new boolean[board.length][board[0].length];
         for (int i = 0; i < board.length; i++) {
@@ -29,9 +27,23 @@ public class Boggle {
 //                mark this square as visited
 //        recurse up, down, left, right with updated word
 //        mark this square as not visited
-        if(visited[row][col] == true){
+        if (row < 0 || row >= board.length || col < 0 || col >= board[0].length || visited[row][col]) {
             return;
         }
+        root = root.getNext()[board[row][col]];
+        prefix += board[row][col];
+        if(root == null){
+            return;
+        }
+        if (root.isWord() && !goodWords.contains(prefix)) {
+            goodWords.add(prefix);
+        }
+        visited[row][col] = true;
+        dfs(board, row - 1, col, root, prefix, visited, goodWords);
+        dfs(board, row + 1, col, root, prefix, visited, goodWords);
+        dfs(board, row, col - 1, root, prefix, visited, goodWords);
+        dfs(board, row, col + 1, root, prefix, visited, goodWords);
+        visited[row][col] = false;
     }
 }
 
